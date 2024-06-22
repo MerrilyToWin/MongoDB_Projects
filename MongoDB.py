@@ -4,10 +4,10 @@ import datetime
 from bson import ObjectId
 
 
-user = 'username'
-password = 'user password'
+user = 'merwin'
+password = 'AmmaMerwin'
 
-uri = f"mongodb+srv://{user}:{password}@projectcluster.ccidztr.mongodb.net/?retryWrites=true&w=majority&appName=ProjectCluster"
+uri = f"mongodb+srv://{user}:{password}@project.dkgp55t.mongodb.net/?retryWrites=true&w=majority&appName=Project"
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
@@ -19,14 +19,13 @@ try:
 except Exception as e:
     print(e)
 
-
 """Create a Database"""
 
 class_a = client["Class_Details"]
 
 """Create a collection"""
 
-students = class_a["Students"]
+students = class_a["student"]
 
 """Data To be inserted"""
 
@@ -199,96 +198,194 @@ student = [
 ]
 
 
-"""Function Insert_one - Inserts only one document"""
-"""Syntax - Collection_name . function_name (data)"""
+# """Function Insert_one - Inserts only one document"""
+# """Syntax - Collection_name . function_name (data)"""
 
-students.insert_one(student)
+# students.insert_one(student)
 
-"""Function Insert_many - Inserts all the data from the dictonary"""
+# """Function Insert_many - Inserts all the data from the dictonary"""
 
-students.insert_many(student)
-
-
-"""Function Find_one - Reads only one document"""
-
-query = {"firstName": "Ananya"}
-
-filter = {"skills": 1}
-
-print(students.find_one(query,filter))
-
-"""Function Find - Reads all the Data"""
+# students.insert_many(student)
 
 
-"""Query"""
+# """Function Find_one - Reads only one document"""
 
-query = {
-    "countryCode": "+91",
-    }
+# query = {"firstName": "Ananya"}
 
-myquery = { "address": { "$gt": "S" } } """-- Address Starting with S and greater than S - "$gt"""
-myquery = { "address": { "$regex": "^S" } } """ ----- Address Starting with only S - "$regex"""
+# filter = {"skills": 1}
 
-"""Filter """
+# print(students.find_one(query,filter))
 
-filters = {
-    "firstName":1,
-    "_id":0
-}
-
-data = students.find(query,filters)
+# """Function Find - Reads all the Data"""
 
 
-for i in data:
-    print(i["firstName"])
+# """Query"""
+
+# query = {
+#     "countryCode": "+91",
+#     }
+
+# myquery = { "address": { "$gt": "S" } } """-- Address Starting with S and greater than S - "$gt"""
+# myquery = { "address": { "$regex": "^S" } } """ ----- Address Starting with only S - "$regex"""
+
+# """Filter """
+
+# filters = {
+#     "firstName":1,
+#     "_id":0
+# }
+
+# data = students.find(query,filters)
 
 
-"""Function Sort - Sorts The Values in Ascending or Desending Order"""
-
-data = students.find(query,filters).sort("firstName") """--- Ascending Order"""
-
-data = students.find(query,filters).sort("firstName") """--- Descending Order"""
-
-for i in data:
-    print(i)
+# for i in data:
+#     print(i["firstName"])
 
 
-"""Function Limit - Shows how many Documents are needed to view to maximum"""
+# """Function Sort - Sorts The Values in Ascending or Desending Order"""
 
-data = students.find(query,filters).limit(5) """---- Shows only 5 elements in the collection"""
+# data = students.find(query,filters).sort("firstName") """--- Ascending Order"""
 
-data = students.find(query,filters).limit(5).sort("firstName")
+# data = students.find(query,filters).sort("firstName") """--- Descending Order"""
 
-for i in data:
-    print(i)
-
-"""Function Update_one - Updates data in the collection of the selected data"""
-
-query = {"_id": ObjectId("666afe13d37672886d33bc0c")}
-
-updateData = {"$set": {"age": 22}}
-
-students.update_one(query, updateData)
+# for i in data:
+#     print(i)
 
 
-"""Function Update_many - Updates data across the collection"""
+# """Function Limit - Shows how many Documents are needed to view to maximum"""
 
-query = {"age": 22}
+# data = students.find(query,filters).limit(5) """---- Shows only 5 elements in the collection"""
 
-updateData = {"$set": {"age": 20}}
+# data = students.find(query,filters).limit(5).sort("firstName")
 
-students.update_many(query, updateData)
+# for i in data:
+#     print(i)
+
+# """Function Update_one - Updates data in the collection of the selected data"""
+
+# query = {"_id": ObjectId("666afe13d37672886d33bc0c")}
+
+# updateData = {"$set": {"age": 22}}
+
+# students.update_one(query, updateData)
 
 
-"""Function Delete_one - Deletes specific data in the collection"""
+# """Function Update_many - Updates data across the collection"""
 
-query = {"_id": ObjectId("666aff7c4603a596df92c37b")}
-students.delete_one(query)
+# query = {"age": 22}
 
-"""Function Delete_many - Deletes all the data in the collection"""
+# updateData = {"$set": {"age": 20}}
 
-students.delete_many({})
+# students.update_many(query, updateData)
 
-"""Function Drop - Deletes the Collection"""
 
-students.drop()
+# """Function Delete_one - Deletes specific data in the collection"""
+
+# query = {"_id": ObjectId("666aff7c4603a596df92c37b")}
+# students.delete_one(query)
+
+# """Function Delete_many - Deletes all the data in the collection"""
+
+# students.delete_many({})
+
+# """Function Drop - Deletes the Collection"""
+
+# students.drop()
+
+# """Function countDocuments - Counts all the documents in the collection"""
+
+# students.count_documents({}) -- """To Get all the document count"""
+# students.count_documents({ "firstName": { "$gt": "S" }})
+
+
+
+"""_________________________________Aggregation_________________________________"""
+
+# result = students.aggregate(
+#     [
+#         {   
+#             "$match": { 
+#                 "age": 26
+#                 }
+#         },
+#         {
+#             "$group": 
+#             {
+#                 "_id": "$firstName",
+#                 "totalZips": { "$count" : { } }
+#             }
+#         },
+#         {
+#             "$out":"Small_Details"
+#         }
+#     ]
+# )
+
+
+# result = students.aggregate([
+#     {
+#         "$sort":{
+#             "age":1
+#         }
+#     },
+#     {
+#         "$limit":5
+#     }
+# ])
+
+
+# result = students.aggregate([
+#     {
+#         "$project":{
+#             "firstName":1,
+#             "lastName":0,
+#             "middleName":"Marie",
+#         }
+#     },
+#     {
+#         "$set": {
+#             "age": 20
+#             }
+#         },
+#     {
+#         "$count":"firstName"
+#     }
+# ])
+
+# print(result)
+
+"""_________________________________Indexes_________________________________"""
+
+
+"""Single Index"""
+
+# result = students.create_index({
+#   "firstName": 1
+# })
+
+# res=students.explain().find(
+#     {
+#         "firstName":"Neha"
+#     }
+# )
+
+
+"""Compound Indexes"""
+
+# students.createIndex({
+#   "firstName":1, 
+#   "lastName":-1,
+# })
+
+
+"""Deleting an index"""
+
+# students.dropIndex(
+#   'active_1_birthdate_-1_name_1'
+# )
+
+# students.dropIndex({
+#   "active":1,
+#   "birthdate":-1, 
+#   "name":1
+# })
